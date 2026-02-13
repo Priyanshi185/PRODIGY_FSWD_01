@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rouge & Noir | interactive restaurant nav</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #0b0b0b; /* deep black background */
+            color: #f2f2f2;
+            line-height: 1.6;
+        }
+
+        /* ===== FIXED NAVIGATION — BLACK & RED THEME ===== */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #1a0000; /* deep red-black */
+            padding: 0.9rem 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 6px 20px rgba(255, 40, 40, 0.15);
+            transition: background-color 0.4s ease, box-shadow 0.3s, padding 0.3s;
+            z-index: 1000;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #b31b1b;
+        }
+
+        .logo {
+            color: #ffd8d8;
+            font-weight: 700;
+            font-size: 1.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0 #8b0000;
+        }
+
+        .logo i {
+            color: #ff4d4d;
+            margin-right: 12px;
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.3rem;
+            transition: all 0.3s;
+        }
+
+        .nav-menu li a {
+            text-decoration: none;
+            color: #ffc2c2;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 0.4rem 0.2rem;
+            transition: color 0.2s, border-bottom 0.2s, transform 0.1s;
+            border-bottom: 3px solid transparent;
+            letter-spacing: 0.5px;
+        }
+
+        /* HOVER INTERACTIVITY — changes to vibrant red */
+        .nav-menu li a:hover {
+            color: #ff5555;
+            border-bottom: 3px solid #ff2a2a;
+            transform: translateY(-2px);
+        }
+
+        /* mobile toggle */
+        .menu-toggle {
+            display: none;
+            font-size: 2.2rem;
+            color: #ffaaaa;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .menu-toggle:hover {
+            color: #ff5555;
+            transform: scale(1.1);
+        }
+
+        /* ===== SCROLLED STYLE — NAVBAR turns almost black with red accent ===== */
+        #navbar.scrolled {
+            background: #0c0c0c; /* pitch black */
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.6);
+            padding: 0.6rem 2.2rem;
+            border-bottom: 2px solid #b22222;
+        }
+
+        #navbar.scrolled .logo {
+            color: #ffe6e6;
+            text-shadow: 3px 3px 0 #660000;
+        }
+
+        #navbar.scrolled .logo i {
+            color: #ff3333;
+        }
+
+        #navbar.scrolled .nav-menu li a {
+            color: #f2a0a0;
+        }
+
+        #navbar.scrolled .nav-menu li a:hover {
+            color: #ff5e5e;
+            border-bottom-color: #ff3b3b;
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .restaurant-content {
+            max-width: 1300px;
+            margin: 130px auto 50px;
+            padding: 1.8rem 2.5rem;
+            background: #111111;
+            border-radius: 40px 40px 20px 20px;
+            box-shadow: 0 20px 40px rgba(180, 0, 0, 0.3);
+            border: 1px solid #8b1a1a;
+        }
+
+        /* section styling */
+        .menu-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 100px;
+            background: #1e1e1e;
+            padding: 2rem 2rem;
+            border-radius: 30px;
+            border-left: 10px solid #b31b1b;
+            box-shadow: inset 0 0 10px #2a0000;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            text-transform: uppercase;
+            color: #ffcaca;
+            border-bottom: 4px solid #a52a2a;
+            padding-bottom: 0.75rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title i {
+            color: #ff4d4d;
+            font-size: 2.5rem;
+        }
+
+        /* food grid — cards with black & red vibe */
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 2rem;
+        }
+
+        .food-card {
+            background: #1a1a1a;
+            border: 2px solid #5c1a1a;
+            border-radius: 28px;
+            padding: 1.8rem 1.4rem;
+            transition: transform 0.25s, box-shadow 0.3s;
+            box-shadow: 0 10px 20px rgba(255, 0, 0, 0.2);
+            color: #f0d0d0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .food-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px #b30000;
+            border-color: #ff3b3b;
+        }
+
+        .food-card i {
+            font-size: 2.8rem;
+            color: #ff5e5e;
+            margin-bottom: 0.8rem;
+        }
+
+        .food-name {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #ffa0a0;
+            margin-bottom: 0.25rem;
+        }
+
+        .food-desc {
+            font-size: 1rem;
+            color: #b3a0a0;
+            margin-bottom: 0.7rem;
+            font-style: italic;
+        }
+
+        .price-rating {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            border-top: 2px dashed #8b0000;
+            padding-top: 1rem;
+        }
+
+        .price {
+            background: #2c0707;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: #ffb3b3;
+            border: 1px solid red;
+        }
+
+        .rating {
+            background: black;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffa500;
+            border: 1px solid #a52a2a;
+        }
+
+        .rating i {
+            font-size: 1rem;
+            color: gold;
+            margin-right: 4px;
+        }
+
+        /* location block */
+        .location-info {
+            background: #1e0000;
+            border-radius: 50px;
+            padding: 2rem 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px solid #b22222;
+            margin: 2rem 0 0;
+            font-size: 1.4rem;
+        }
+
+        .location-info i {
+            color: #ff4f4f;
+            font-size: 2.8rem;
+            margin-right: 15px;
+        }
+
+        .address {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffbebe;
+        }
+
+        .open-hours {
+            color: #ff8787;
+        }
+
+        .open-hours span {
+            background: black;
+            padding: 5px 15px;
+            border-radius: 30px;
+            border: 1px solid red;
+            margin-left: 10px;
+        }
+
+        /* footer */
+        .resto-footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #a57373;
+            border-top: 2px solid #5e1b1b;
+            padding-top: 1.5rem;
+        }
+
+        /* ===== responsive ===== */
+        @media screen and (max-width: 800px) {
+            #navbar {
+                padding: 0.8rem 1.8rem;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .nav-menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.2rem;
+                padding: 1.8rem 0 1.5rem;
+                background: inherit;
+                border-radius: 0 0 30px 30px;
+            }
+            .nav-menu.active {
+                display: flex;
+            }
+            .restaurant-content {
+                margin-top: 110px;
+                padding: 1rem 1.5rem;
+            }
+            .section-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media screen and (max-width: 500px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+            .logo i {
+                font-size: 1.5rem;
+            }
+            .food-name {
+                font-size: 1.6rem;
+            }
+            .location-info {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FIXED INTERACTIVE NAVIGATION (black & red theme) -->
+    <nav id="navbar">
+        <div class="logo">
+            <i class="fas fa-utensils"></i> ROUGE & NOIR
+        </div>
+
+        <button class="menu-toggle" id="mobile-menu" aria-label="menu">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#indian"><i class="fas fa-pepper-hot" style="margin-right: 6px;"></i> Indian</a></li>
+            <li><a href="#chinese"><i class="fas fa-dragon"></i> Chinese</a></li>
+            <li><a href="#beverages"><i class="fas fa-mug-hot"></i> Beverages</a></li>
+            <li><a href="#desserts"><i class="fas fa-ice-cream"></i> Desserts</a></li>
+            <li><a href="#location"><i class="fas fa-map-pin"></i> Location</a></li>
+        </ul>
+    </nav>
+
+    <main class="restaurant-content">
+        <!-- ========== INDIAN SECTION ========= -->
+        <section id="indian" class="menu-section">
+            <div class="section-title"><i class="fas fa-pepper-hot"></i> Indian kitchen</div>
+            <div class="food-grid">
+                <div class="food-card">
+                    <i class="fas fa-dumpling"></i>
+                    <div class="food-name">Dumplings</div>
+                    <div class="food-desc">steamed chicken & veg momos, spicy red chutney</div>
+                    <div class="price-rating"><span class="price">₹220</span><span class="rating"><i class="fas fa-star"></i> 4.6</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-bowl-food"></i>
+                    <div class="food-name">Butter Chicken</div>
+                    <div class="food-desc">creamy tomato gravy, tender tandoori chicken</div>
+                    <div class="price-rating"><span class="price">₹410</span><span class="rating"><i class="fas fa-star"></i> 4.9</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-bread-slice"></i>
+                    <div class="food-name">Garlic Naan</div>
+                    <div class="food-desc">butter brushed, loaded with roasted garlic</div>
+                    <div class="price-rating"><span class="price">₹85</span><span class="rating"><i class="fas fa-star"></i> 4.5</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-fire"></i>
+                    <div class="food-name">Prawn Biryani</div>
+                    <div class="food-desc">spicy hyderabadi style, fried onions, raita</div>
+                    <div class="price-rating"><span class="price">₹490</span><span class="rating"><i class="fas fa-star"></i> 4.7</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== CHINESE SECTION ========= -->
+        <section id="chinese" class="menu-section">
+            <div class="section-title"><i class="fas fa-dragon"></i> Chinese corner</div>
+            <div class="food-grid">
+                <div class="food-card">
+                    <i class="fas fa-egg"></i>
+                    <div class="food-name">Hakka Noodles</div>
+                    <div class="food-desc">chicken / veg, dark soya, wok tossed bell peppers</div>
+                    <div class="price-rating"><span class="price">₹260</span><span class="rating"><i class="fas fa-star"></i> 4.4</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-wheat-awn"></i>
+                    <div class="food-name">Dumplings</div>
+                    <div class="food-desc">pan-fried pork / veg, chilli oil dip</div>
+                    <div class="price-rating"><span class="price">₹250</span><span class="rating"><i class="fas fa-star"></i> 4.8</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-egg"></i>
+                    <div class="food-name">Schezwan Fried Rice</div>
+                    <div class="food-desc">loaded with burnt garlic & red chillies</div>
+                    <div class="price-rating"><span class="price">₹290</span><span class="rating"><i class="fas fa-star"></i> 4.3</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-leaf"></i>
+                    <div class="food-name">White Sauce Pasta</div>
+                    <div class="food-desc">creamy italian-indian fusion, mushrooms & herbs</div>
+                    <div class="price-rating"><span class="price">₹330</span><span class="rating"><i class="fas fa-star"></i> 4.6</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== BEVERAGES ========= -->
+        <section id="beverages" class="menu-section">
+            <div class="section-title"><i class="fas fa-mug-hot"></i> Beverages</div>
+            <div class="food-grid">
+                <div class="food-card">
+                    <i class="fas fa-wine-bottle"></i>
+                    <div class="food-name">Red wine sangria</div>
+                    <div class="food-desc">house red, citrus, cinnamon (alcoholic / mocktail)</div>
+                    <div class="price-rating"><span class="price">₹340</span><span class="rating"><i class="fas fa-star"></i> 4.7</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-whiskey-glass"></i>
+                    <div class="food-name">Spiced buttermilk</div>
+                    <div class="food-desc">masala chaas, roasted cumin, black salt</div>
+                    <div class="price-rating"><span class="price">₹110</span><span class="rating"><i class="fas fa-star"></i> 4.2</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-cocktail"></i>
+                    <div class="food-name">Kokum cooler</div>
+                    <div class="food-desc">tangy mangosteen, mint, soda</div>
+                    <div class="price-rating"><span class="price">₹180</span><span class="rating"><i class="fas fa-star"></i> 4.5</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-coffee"></i>
+                    <div class="food-name">Filter coffee</div>
+                    <div class="food-desc">south indian style, chicory, served in dabara</div>
+                    <div class="price-rating"><span class="price">₹90</span><span class="rating"><i class="fas fa-star"></i> 4.9</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== DESSERTS / ICE CREAM ========= -->
+        <section id="desserts" class="menu-section">
+            <div class="section-title"><i class="fas fa-ice-cream"></i> Desserts & ice cream</div>
+            <div class="food-grid">
+                <div class="food-card">
+                    <i class="fas fa-ice-cream"></i>
+                    <div class="food-name">Belgian dark chocolate</div>
+                    <div class="food-desc">rich chocolate ice cream, brownie chunks</div>
+                    <div class="price-rating"><span class="price">₹210</span><span class="rating"><i class="fas fa-star"></i> 4.8</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-mug-hot"></i>
+                    <div class="food-name">Sizzling brownie</div>
+                    <div class="food-desc">walnut brownie, vanilla scoop, chocolate sauce</div>
+                    <div class="price-rating"><span class="price">₹350</span><span class="rating"><i class="fas fa-star"></i> 4.9</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-cake"></i>
+                    <div class="food-name">Gulab jamun cheesecake</div>
+                    <div class="food-desc">fusion: baked cheesecake, rose syrup</div>
+                    <div class="price-rating"><span class="price">₹290</span><span class="rating"><i class="fas fa-star"></i> 4.5</span></div>
+                </div>
+                <div class="food-card">
+                    <i class="fas fa-candy-cane"></i>
+                    <div class="food-name">Mango kulfi</div>
+                    <div class="food-desc">traditional indian ice cream, nuts & saffron</div>
+                    <div class="price-rating"><span class="price">₹150</span><span class="rating"><i class="fas fa-star"></i> 4.7</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== LOCATION & CONTACT ========= -->
+        <section id="location" class="menu-section" style="border-left-color: #ff3e3e;">
+            <div class="section-title"><i class="fas fa-map-marked-alt"></i> Our location</div>
+            <div class="location-info">
+                <div class="address">
+                    <i class="fas fa-location-dot"></i> 11, Rouge Street, Bandra West, Mumbai – 400050
+                </div>
+                <div class="open-hours">
+                    <i class="fas fa-clock"></i> Open <span>12pm – 1am</span>
+                </div>
+            </div>
+            <!-- extra details: ratings summary, etc -->
+            <div style="display: flex; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; background: #1c0a0a; padding: 1.4rem; border-radius: 60px; border: 1px solid #a52a2a;">
+                <span><i class="fas fa-star" style="color: gold;"></i> 4.7 overall (2.3k reviews)</span>
+                <span><i class="fas fa-tag" style="color: #ff6666;"></i> Avg meal: ₹650 for two</span>
+                <span><i class="fas fa-phone-alt" style="color: #ff8484;"></i> 022–2626 0808</span>
+            </div>
+        </section>
+
+        <footer class="resto-footer">
+            <p>© ROUGE & NOIR — black & red concept. interactive nav: scroll & hover.</p>
+        </footer>
+    </main>
+
+    <!-- JavaScript for scroll class + mobile hamburger -->
+    <script>
+        (function() {
+            const navbar = document.getElementById('navbar');
+            const toggleBtn = document.getElementById('mobile-menu');
+            const menu = document.getElementById('navMenu');
+
+            // scroll handler (add/remove .scrolled)
+            function scrollEffect() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }
+            window.addEventListener('scroll', scrollEffect);
+            scrollEffect(); // on page load
+
+            // mobile toggle
+            toggleBtn.addEventListener('click', function() {
+                menu.classList.toggle('active');
+                const icon = toggleBtn.querySelector('i');
+                if (menu.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // close mobile menu after clicking link + smooth scroll
+            const links = document.querySelectorAll('.nav-menu a');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href && href.startsWith('#')) {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth' });
+                        }
+                        // if mobile menu open, close it
+                        if (window.innerWidth <= 800 && menu.classList.contains('active')) {
+                            menu.classList.remove('active');
+                            const icon = toggleBtn.querySelector('i');
+                            icon.classList.remove('fa-times');
+                            icon.classList.add('fa-bars');
+                        }
+                    }
+                });
+            });
+
+            // reset menu on resize if screen becomes large
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 800 && menu.classList.contains('active')) {
+                    menu.classList.remove('active');
+                    const icon = toggleBtn.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
